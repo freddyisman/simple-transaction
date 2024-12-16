@@ -5,8 +5,6 @@ from database import dependencies, orm
 from src.account.http import account
 from src.transaction.http import transaction
 
-orm.Base.metadata.create_all(bind=dependencies.engine)
-
 
 def create_app() -> FastAPI:
     app = FastAPI(title="Simple Transaction", docs_url="/v1/docs")
