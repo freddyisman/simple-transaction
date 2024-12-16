@@ -28,7 +28,8 @@
 
 ## How to test
 
-1. Start the service first, then access http://0.0.0.0:8000/v1/docs for Swagger API testing.
+1. When the service starts, the migration and testing are running before application deployment to ensure everything works correctly, so manual pytest execution is not necessary.
+2. For convenience, if manual testing feels needed, start the service first, then access http://0.0.0.0:8000/v1/docs for Swagger API testing.
 
 
 ## Database Schema
