@@ -3,8 +3,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 COPY ./database /app/database
-COPY ./domain /app/domain
-COPY ./service /app/service
+COPY ./src /app/src
 COPY ./test /app/test
 
 COPY poetry.lock pyproject.toml alembic.ini app.py .env /app/

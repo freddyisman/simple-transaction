@@ -1,11 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional
-
-
-class CreateAccountRequest(BaseModel):
-    name: str
-    number: str
-    balance: Optional[int] = 0
+from typing import List
 
 
 class CreateTransactionRequest(BaseModel):
