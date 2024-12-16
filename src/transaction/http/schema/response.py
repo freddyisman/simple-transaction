@@ -1,12 +1,6 @@
 from pydantic import BaseModel
 from typing import List
-
-
-class TransactionData(BaseModel):
-    id: str
-    sender_number: str
-    receiver_number: str
-    amount: int
+from src.transaction.model.entity import TransactionData
 
 
 class CreateTransactionResponse(BaseModel):

@@ -1,11 +1,6 @@
 from pydantic import BaseModel
 from typing import List
-
-
-class AccountData(BaseModel):
-    name: str
-    number: str
-    balance: int
+from src.account.model.entity import AccountData
 
 
 class CreateAccountResponse(BaseModel):

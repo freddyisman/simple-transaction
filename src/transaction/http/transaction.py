@@ -3,6 +3,7 @@ from fastapi.routing import APIRouter
 from database.dependencies import SessionLocal
 from src.transaction.http.schema import request, response
 from src.transaction.service import transaction as transaction_service
+from src.transaction.model import entity
 
 router = APIRouter(prefix="/transaction", tags=["Transaction"])
 
@@ -17,8 +18,11 @@ router = APIRouter(prefix="/transaction", tags=["Transaction"])
 )
 def create_transaction(request: request.CreateTransactionRequest):
     db_session = SessionLocal()
+    transaction_data = entity.TransactionData(**request.__dict__)
     try:
-        transaction = transaction_service.create_transaction(db_session, request)
+        transaction = transaction_service.create_transaction(
+            db_session, transaction_data
+        )
     except Exception as e:
         return response.ErrorResponse(message=str(e))
     else:

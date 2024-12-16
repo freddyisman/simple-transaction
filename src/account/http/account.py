@@ -3,6 +3,7 @@ from fastapi.routing import APIRouter
 from database.dependencies import SessionLocal
 from src.account.http.schema import request, response
 from src.account.service import account as account_service
+from src.account.model import entity
 
 router = APIRouter(prefix="/account", tags=["Account"])
 
@@ -17,8 +18,9 @@ router = APIRouter(prefix="/account", tags=["Account"])
 )
 def create_account(request: request.CreateAccountRequest):
     db_session = SessionLocal()
+    account_data = entity.AccountData(**request.__dict__)
     try:
-        account = account_service.create_account(db_session, request)
+        account = account_service.create_account(db_session, account_data)
     except Exception as e:
         return response.ErrorResponse(message=str(e))
     else:

@@ -1,18 +1,18 @@
 from sqlalchemy.orm import Session
 
 from database import orm
-from ..http.schema import request
+from src.account.model import entity
 
 from typing import Dict, Any, List
 
 
 def create_account(
-    session: Session, request: request.CreateAccountRequest
+    session: Session, account_data: entity.AccountData
 ) -> Dict[str, Any]:
     account = orm.Account(
-        name=request.name,
-        number=request.number,
-        balance=request.balance,
+        name=account_data.name,
+        number=account_data.number,
+        balance=account_data.balance,
     )
     session.add(account)
     session.commit()

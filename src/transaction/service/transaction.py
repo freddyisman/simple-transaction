@@ -2,22 +2,22 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 
 from database import orm
-from ..http.schema import request
+from src.transaction.model import entity
 
 from typing import Dict, Any, List
 
 
 def create_transaction(
-    session: Session, request: request.CreateTransactionRequest
+    session: Session, transaction_data: entity.TransactionData
 ) -> Dict[str, Any]:
     sender_account = (
         session.query(orm.Account)
-        .filter(orm.Account.number == request.sender_number)
+        .filter(orm.Account.number == transaction_data.sender_number)
         .first()
     )
     receiver_account = (
         session.query(orm.Account)
-        .filter(orm.Account.number == request.receiver_number)
+        .filter(orm.Account.number == transaction_data.receiver_number)
         .first()
     )
 
@@ -31,7 +31,7 @@ def create_transaction(
         {
             "sender_number": sender_account.number,
             "receiver_number": receiver_account.number,
-            "transaction_amount": request.amount,
+            "transaction_amount": transaction_data.amount,
         },
     )
 
