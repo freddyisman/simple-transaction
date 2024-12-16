@@ -3,6 +3,7 @@ import json
 
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import update
+from sqlalchemy import text
 
 from database import orm
 from domain import request
@@ -45,36 +46,38 @@ def list_account(session: Session) -> List[Dict[str, Any]]:
 def create_transaction(
     session: Session, request: request.CreateTransactionRequest
 ) -> Dict[str, Any]:
-    source_account = (
+    sender_account = (
         session.query(orm.Account)
         .filter(orm.Account.number == request.sender_number)
         .first()
     )
-    destination_account = (
+    receiver_account = (
         session.query(orm.Account)
         .filter(orm.Account.number == request.receiver_number)
         .first()
     )
 
-    if not source_account or not destination_account:
+    if not sender_account or not receiver_account:
         raise Exception("Account not found")
 
-    session.query(orm.Account).filter(
-        orm.Account.id == source_account.id,
-    ).update({orm.Account.balance: orm.Account.balance - request.amount})
-
-    session.query(orm.Account).filter(
-        orm.Account.id == destination_account.id,
-    ).update({orm.Account.balance: orm.Account.balance + request.amount})
-
-    transaction = orm.TransactionLog(
-        sender_number=request.sender_number,
-        receiver_number=request.receiver_number,
-        amount=request.amount,
+    session.execute(
+        text(
+            "SELECT create_transaction(:sender_number, :receiver_number, :transaction_amount)"
+        ),
+        {
+            "sender_number": sender_account.number,
+            "receiver_number": receiver_account.number,
+            "transaction_amount": request.amount,
+        },
     )
 
-    session.add(transaction)
     session.commit()
+
+    transaction = (
+        session.query(orm.TransactionLog)
+        .order_by(orm.TransactionLog.created_at.desc())
+        .first()
+    )
     return transaction.to_dict()
 
 
