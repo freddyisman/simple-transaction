@@ -22,7 +22,3 @@ db_service = DB(DATABASE_URL)
 
 def get_database():
     return db_service
-
-
-# engine = create_engine(DATABASE_URL)
-# SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

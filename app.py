@@ -1,7 +1,6 @@
 import uvicorn
 
 from fastapi import FastAPI
-from database import dependencies, orm
 from src.account.http import account
 from src.transaction.http import transaction
 
